@@ -63,12 +63,6 @@ const checkIfExists = (name) => {
 
 }
 
-const generateId = () => {
-    const maxId = persons.length > 0 ?
-        Math.max(...persons.map(n => n.id)) :
-        0
-    return maxId + 1
-}
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
@@ -85,8 +79,7 @@ app.post('/api/persons', (request, response) => {
 
     const phoneguy = {
         name: body.name,
-        number: body.number,
-        id: generateId(),
+        number: body.number
     }
     PostedPerson = JSON.stringify(phoneguy)
     
