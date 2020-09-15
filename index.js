@@ -3,6 +3,7 @@ const app = express()
 app.use(express.static('build'))
 const morgan = require('morgan')
 app.use(express.json())
+const mongoose = require('mongoose')
 app.use(morgan(function (tokens, req, res) {
     return [
       tokens.method(req, res),
@@ -14,36 +15,24 @@ app.use(morgan(function (tokens, req, res) {
     ].join(' ')
   }))
 const cors = require('cors')
-app.use(cors())  
+app.use(cors())
+const password = process.argv[2]  
+const url = `mongodb+srv://nuksws77:${password}@phonebook.ew1pi.mongodb.net/PhoneBook?retryWrites=true&w=majority`
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 
-let PostedPerson
-let persons = [
-    {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": 1
-    },
-    {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
-      "id": 2
-    },
-    {
-      "name": "Dan Abramov",
-      "number": "12-43-234345",
-      "id": 3
-    },
-    {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": 4
-    }
-  ]
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String,
+  id: Number
+})
 
-
-  
+const Person = mongoose.model('Person', personSchema)
+let PostedPerson  
 app.get('/api/persons', (req, res) => {
+  Person.find({}).then(persons => {
     res.json(persons)
+  })
+    
   })
 app.get('/info', (req, res) => {
     const length = Object.keys(...persons).length
