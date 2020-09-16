@@ -1,3 +1,4 @@
+
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
@@ -9,6 +10,10 @@ const errorHandler = (error, request, response, next) => {
 
   next(error)
 }
+const info = (...params) => {
+  console.log(...params)
+}
 
 
-module.exports = errorHandler
+
+module.exports = { errorHandler, info }
